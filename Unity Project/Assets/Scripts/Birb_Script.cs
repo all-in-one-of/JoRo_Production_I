@@ -61,11 +61,12 @@ public class Birb_Script : MonoBehaviour
 
             }
 
-            if (other.gameObject.CompareTag("Respawn"))
-            {
-                Debug.Log("collided with restart box");
-                SceneManager.LoadScene(1);
-            }
+            //if (other.gameObject.CompareTag("Respawn"))
+            //{
+            //    Debug.Log("collided with restart box");
+            //    SceneManager.LoadScene(1);
+            //    seed_count = 0;
+            //}
         }
     }
 

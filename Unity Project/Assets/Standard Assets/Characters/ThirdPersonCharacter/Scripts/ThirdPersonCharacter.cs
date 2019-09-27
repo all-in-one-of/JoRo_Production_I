@@ -31,6 +31,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         CapsuleCollider m_Capsule;
         bool m_Crouching;
 
+        public GameObject birb;
+        private Animator birbAnim;
+        private Animation birbAnimation;
+        bool canJump = true;
+
 
         void Start()
         {
@@ -43,8 +48,39 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             m_OrigGroundCheckDistance = m_GroundCheckDistance;
 
+            birbAnim = birb.GetComponent<Animator>();
+            //birbAnimation = birb.GetComponent<Animation>();
+
         }
 
+        private void FixedUpdate()
+        {
+
+            if (canJump)
+            {
+               
+                if (Input.GetButtonDown("Jump"))
+                {
+                    Debug.Log("Space is pressed");
+                    m_Rigidbody.AddForce(Vector3.up * m_JumpPower);
+                    birbAnim.Play("Jumping_one hand");
+                    birbAnim.SetBool("Jump1", true);
+                    Debug.Log("Birb is jumping!");
+                }
+                else
+                {
+                    birbAnim.SetBool("Jump1", false);
+                    //birbAnim.GetComponent<Animation>().Stop("Jumping_one hand");
+
+                }
+            }
+            //else
+            //{
+            //    birbAnim.SetBool("Jump1", false);
+            //    Debug.Log("Not jumping anymore");
+            //}
+
+        }
 
         public void Move(Vector3 move, bool crouch, bool jump)
         {
@@ -76,6 +112,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             // send input and other state parameters to the animator
             UpdateAnimator(move);
+
+            //if (Input.GetButtonDown("Jump"))
+            //{
+            //    Debug.Log("Space is pressed");
+            //    m_Rigidbody.AddForce(Vector3.up * m_JumpPower);
+            //    birbAnim.SetBool("Jump1", true);
+            //    Debug.Log("Birb is jumping!");
+            //}
+            //else
+            //{
+            //    birbAnim.SetBool("Jump1", false);
+
+            //}
         }
 
 
@@ -127,7 +176,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             m_Animator.SetBool("OnGround", m_IsGrounded);
             if (!m_IsGrounded)
             {
-                m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
+                //m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
+                m_Animator.SetTrigger("Jump");
             }
 
             // calculate which leg is behind, so as to leave that leg trailing in the jump animation
@@ -177,6 +227,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 m_Animator.applyRootMotion = false;
                 m_GroundCheckDistance = 0.1f;
             }
+
+
         }
 
         void ApplyExtraTurnRotation()
@@ -215,6 +267,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 m_GroundNormal = hitInfo.normal;
                 m_IsGrounded = true;
+                //Debug.Log("You are on the ground");
                 m_Animator.applyRootMotion = true;
             }
             else
@@ -225,7 +278,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
         }
 
-        
+
         //private void Update()
         //{
         //    Debug.Log("fly baby fly");
@@ -239,6 +292,53 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         //        //transform.parent.position = new Vector3(transform.parent.position.x, yPos, transform.parent.position.z);
         //    }
         //}
-        
+
+        private void OnTriggerEnter(Collider col)
+        {
+            if (col.tag == "Respawn")
+            {
+                SceneManager.LoadScene(1);
+                //seed_count = 0;
+            }
+
+            if (col.tag == "Hyperspeed")
+            {
+                NinjaMode();
+                
+
+                //if (Input.GetButtonDown("Jump"))
+                //{
+                //    m_Rigidbody.AddForce(Vector3.up * m_JumpPower);
+                //    birbAnim.Play("Jumping_one hand");
+                //}
+                //else
+                //{
+                //    canJump = false;
+                //    birbAnimation.Stop("Jumping_one hand");
+                //    //Stop("Jumping_one hand");
+                //}
+            }
+
+            if (col.tag == "Exit_Hyperspeed")
+            {
+                birbAnim.Play("Running");
+                birbAnim.SetBool("Hyperspeed", false);
+                birbAnim.SetBool("Run", true);
+                canJump = true;
+                m_MoveSpeedMultiplier = 5f;
+
     }
+}
+
+        private void NinjaMode()
+        {
+            birbAnim.Play("Run_ninja");
+            birbAnim.SetBool("Hyperspeed", true);
+            birbAnim.SetBool("Run", false);
+            canJump = false;
+            m_MoveSpeedMultiplier = 50f;
+
+    }
+
+}
 }

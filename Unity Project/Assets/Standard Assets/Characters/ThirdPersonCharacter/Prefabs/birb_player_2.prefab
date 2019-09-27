@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 13615390}
   - component: {fileID: 11444856}
   - component: {fileID: 11469404}
+  - component: {fileID: 1251446829500886552}
   - component: {fileID: 1441830417}
   m_Layer: 0
   m_Name: birb_player_2
@@ -119,6 +120,26 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 5
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.3
+  birb: {fileID: 0}
+--- !u!114 &1251446829500886552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 938a22dd4d410fa479422ebae1e650de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seedBar: {fileID: 0}
+  seedRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
   countText: {fileID: 0}
   winText: {fileID: 0}
 --- !u!82 &1441830417
